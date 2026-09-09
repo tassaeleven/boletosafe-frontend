@@ -1,0 +1,77 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 4px;
+  padding-inline: 12px;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 12px;
+  text-decoration: none;
+  color: var(--mat-sys-primary);
+  font: var(--mat-sys-title-medium);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.nav {
+  display: flex;
+  gap: 2px;
+
+  a {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  a.ativo {
+    background: color-mix(in srgb, var(--mat-sys-primary) 14%, transparent);
+    color: var(--mat-sys-primary);
+  }
+}
+
+.espaco {
+  flex: 1 1 auto;
+}
+
+.conta-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 16px;
+
+  small {
+    color: var(--mat-sys-on-surface-variant);
+    text-transform: capitalize;
+  }
+}
+
+.pagina {
+  flex: 1;
+  width: 100%;
+  max-width: 880px;
+  margin-inline: auto;
+  padding: 32px 20px 64px;
+}
+
+@media (max-width: 600px) {
+  .marca span {
+    display: none;
+  }
+
+  .nav .rotulo,
+  .topbar button .rotulo {
+    display: none;
+  }
+}

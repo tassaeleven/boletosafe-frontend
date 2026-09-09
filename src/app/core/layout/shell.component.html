@@ -1,0 +1,44 @@
+<mat-toolbar class="topbar">
+  <a class="marca" routerLink="/boletos/analise">
+    <mat-icon>verified_user</mat-icon>
+    <span>BoletoSafe</span>
+  </a>
+
+  <nav class="nav">
+    <a mat-button routerLink="/boletos/analise" routerLinkActive="ativo">
+      <mat-icon>fact_check</mat-icon>
+      <span class="rotulo">Analisar</span>
+    </a>
+    <a mat-button routerLink="/alertas" routerLinkActive="ativo">
+      <mat-icon>notifications</mat-icon>
+      <span class="rotulo">Alertas</span>
+    </a>
+  </nav>
+
+  <span class="espaco"></span>
+
+  <button mat-button [matMenuTriggerFor]="conta">
+    <mat-icon>account_circle</mat-icon>
+    <span class="rotulo">{{ authStore.nome() ?? 'Minha conta' }}</span>
+    <mat-icon iconPositionEnd>arrow_drop_down</mat-icon>
+  </button>
+  <mat-menu #conta="matMenu">
+    @if (authStore.nome()) {
+      <div class="conta-info">
+        <strong>{{ authStore.nome() }}</strong>
+        @if (authStore.perfil()) {
+          <small>{{ authStore.perfil() }}</small>
+        }
+      </div>
+      <mat-divider />
+    }
+    <button mat-menu-item (click)="sair()">
+      <mat-icon>logout</mat-icon>
+      <span>Sair</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<main class="pagina">
+  <router-outlet />
+</main>
