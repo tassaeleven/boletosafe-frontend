@@ -1,0 +1,76 @@
+// ---------------------------------------------------------------------------
+// BoletoSafe — tema global (Angular Material 3 / M3)
+// Paleta gerada em `_theme-colors.scss` a partir de:
+//   primary #2F6FED · secondary #4C6A92 · tertiary #12B886
+// Docs: https://material.angular.dev/guide/theming
+// ---------------------------------------------------------------------------
+@use '@angular/material' as mat;
+@use './theme-colors' as brand;
+
+html {
+  height: 100%;
+  color-scheme: light; // aplicação trava no tema claro
+
+  @include mat.theme(
+    (
+      color: (
+        primary: brand.$primary-palette,
+        tertiary: brand.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  --mat-sys-corner-medium: 14px;
+  --mat-sys-corner-large: 20px;
+
+  // Azuis da marca usados para separar as camadas da interface.
+  --bs-bg: #e9f2fe; // fundo da página — azul bem claro
+  --bs-form: #cfe1f8; // cartão do formulário de análise — azul intermediário
+  --bs-form-border: #b4cded; // contorno do cartão azul
+}
+
+// Override opcional de alto contraste (acessibilidade).
+@media (prefers-contrast: more) {
+  html {
+    @include brand.high-contrast-overrides(light);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bs-bg);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--mat-sys-primary) 24%, transparent);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--mat-sys-on-surface) 22%, transparent) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--mat-sys-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
