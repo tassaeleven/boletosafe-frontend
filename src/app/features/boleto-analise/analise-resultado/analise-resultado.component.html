@@ -1,0 +1,25 @@
+<mat-card
+  appearance="outlined"
+  class="resultado"
+  [class.risco-baixo]="resultado().nivelRisco === 'BAIXO'"
+  [class.risco-atencao]="resultado().nivelRisco === 'ATENCAO'"
+  [class.risco-alto]="resultado().nivelRisco === 'ALTO'"
+>
+  <div class="resultado__topo">
+    <div>
+      <p class="resultado__label">Resultado da análise</p>
+      <p class="resultado__score">{{ resultado().scoreTotal }}<span>/100</span></p>
+    </div>
+    <app-risk-badge [nivelRisco]="resultado().nivelRisco" />
+  </div>
+
+  <mat-progress-bar mode="determinate" [value]="resultado().scoreTotal"></mat-progress-bar>
+
+  <p class="resultado__obs">{{ resultado().observacoes }}</p>
+
+  <p class="resultado__aviso">
+    <mat-icon>info</mat-icon>
+    Indicador de apoio à decisão. Confirme os dados do beneficiário por um canal
+    oficial antes de pagar.
+  </p>
+</mat-card>

@@ -1,0 +1,78 @@
+.cabecalho {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0 0 4px;
+    font: var(--mat-sys-headline-small);
+  }
+
+  p {
+    margin: 0;
+    color: var(--mat-sys-on-surface-variant);
+    font: var(--mat-sys-body-medium);
+  }
+}
+
+// Cartão do formulário em azul intermediário, destacando-se do fundo claro.
+.cartao {
+  position: relative;
+  padding: 24px;
+  border-radius: var(--mat-sys-corner-large);
+  overflow: hidden;
+  --mdc-outlined-card-container-color: var(--bs-form);
+  --mdc-outlined-card-outline-color: var(--bs-form-border);
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 16px;
+}
+
+// Campos com fundo branco para manter a leitura nítida sobre o azul.
+// `::ng-deep` alcança os elementos internos do Material; o prefixo `.cartao`
+// mantém a regra restrita a este componente.
+.cartao ::ng-deep .mat-mdc-text-field-wrapper {
+  background: var(--mat-sys-surface);
+  border-radius: 10px;
+}
+
+.campo-largo {
+  grid-column: 1 / -1;
+}
+
+.erro {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  color: var(--mat-sys-error);
+  font: var(--mat-sys-body-small);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.acoes {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bs-form-border);
+}
+
+.cartao__barra {
+  position: absolute;
+  inset: auto 0 0;
+}
+
+@media (max-width: 560px) {
+  form {
+    grid-template-columns: 1fr;
+  }
+}

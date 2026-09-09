@@ -1,0 +1,93 @@
+<header class="cabecalho">
+  <h1>Analisar boleto</h1>
+  <p>Informe os dados do boleto para verificar inconsistências antes de pagar.</p>
+</header>
+
+<mat-card appearance="outlined" class="cartao">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="campo-largo">
+      <mat-label>Código de barras</mat-label>
+      <input
+        matInput
+        formControlName="linhaDigitavel"
+        inputmode="numeric"
+        placeholder="00000.00000 00000.000000 00000.000000 0 00000000000000"
+      />
+      <mat-icon matSuffix>qr_code_2</mat-icon>
+      @if (form.controls.linhaDigitavel.touched && form.controls.linhaDigitavel.invalid) {
+        <mat-error>Campo obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="campo-largo">
+      <mat-label>Nome do beneficiário</mat-label>
+      <input matInput formControlName="beneficiarioNome" />
+      <mat-icon matSuffix>store</mat-icon>
+      @if (form.controls.beneficiarioNome.touched && form.controls.beneficiarioNome.invalid) {
+        <mat-error>Campo obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>CPF / CNPJ do beneficiário</mat-label>
+      <input matInput formControlName="beneficiarioDocumento" inputmode="numeric" />
+      @if (
+        form.controls.beneficiarioDocumento.touched && form.controls.beneficiarioDocumento.invalid
+      ) {
+        <mat-error>Campo obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Valor informado</mat-label>
+      <span matTextPrefix>R$&nbsp;</span>
+      <input matInput type="number" step="0.01" min="0" formControlName="valorInformado" />
+      @if (form.controls.valorInformado.touched && form.controls.valorInformado.invalid) {
+        <mat-error>Informe um valor maior que zero.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Vencimento informado</mat-label>
+      <input matInput type="date" formControlName="vencimentoInformado" />
+      @if (form.controls.vencimentoInformado.touched && form.controls.vencimentoInformado.invalid) {
+        <mat-error>Campo obrigatório.</mat-error>
+      }
+    </mat-form-field>
+
+    @if (boletoStore.error()) {
+      <p class="erro" role="alert">
+        <mat-icon>error</mat-icon>
+        {{ boletoStore.error() }}
+      </p>
+    }
+
+    <div class="acoes">
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid || boletoStore.loading()"
+      >
+        <mat-icon>fact_check</mat-icon>
+        {{ boletoStore.loading() ? 'Analisando…' : 'Analisar boleto' }}
+      </button>
+      <button
+        mat-button
+        type="button"
+        (click)="boletoStore.limpar()"
+        [disabled]="boletoStore.loading()"
+      >
+        Limpar
+      </button>
+    </div>
+  </form>
+
+  @if (boletoStore.loading()) {
+    <mat-progress-bar mode="indeterminate" class="cartao__barra"></mat-progress-bar>
+  }
+</mat-card>
+
+@if (boletoStore.resultado(); as resultado) {
+  <app-analise-resultado [resultado]="resultado" />
+}
