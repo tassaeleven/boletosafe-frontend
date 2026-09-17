@@ -1,9 +1,9 @@
-<header class="cabecalho">
-  <h1>Analisar boleto</h1>
-  <p>Informe os dados do boleto para verificar inconsistências antes de pagar.</p>
-</header>
+<app-page-hero
+  titulo="Analisar boleto"
+  subtitulo="Informe os dados do boleto para verificar inconsistências antes de pagar."
+/>
 
-<mat-card appearance="outlined" class="cartao">
+<mat-card class="cartao">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="campo-largo">
       <mat-label>Código de barras</mat-label>

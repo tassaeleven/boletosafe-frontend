@@ -1,5 +1,5 @@
 import { DatePipe, TitleCasePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AlertaSeveridade, AlertaStatus } from '../../../core/models/alerta.model';
 import { AlertaStore } from '../data-access/alerta.store';
+import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.component';
 
 @Component({
   selector: 'app-alertas-list',
@@ -14,6 +15,7 @@ import { AlertaStore } from '../data-access/alerta.store';
   imports: [
     DatePipe,
     TitleCasePipe,
+    PageHeroComponent,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -25,6 +27,17 @@ import { AlertaStore } from '../data-access/alerta.store';
 })
 export class AlertasListComponent {
   protected readonly alertaStore = inject(AlertaStore);
+
+  protected readonly subtitulo = computed(() => {
+    if (this.alertaStore.carregando()) {
+      return 'Carregando alertas...';
+    }
+    const total = this.alertaStore.alertas().length;
+    if (total === 0) {
+      return 'Nenhuma ocorrência encontrada para este filtro.';
+    }
+    return `${total} ${total === 1 ? 'alerta encontrado' : 'alertas encontrados'} para este filtro.`;
+  });
 
   protected readonly statusOpcoes: Array<{ valor: AlertaStatus | null; rotulo: string }> = [
     { valor: null, rotulo: 'Todos' },

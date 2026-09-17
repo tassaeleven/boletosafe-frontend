@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BoletoStore } from '../data-access/boleto.store';
 import { AnaliseResultadoComponent } from '../analise-resultado/analise-resultado.component';
+import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.component';
 
 @Component({
   selector: 'app-analise-form',
@@ -15,6 +16,7 @@ import { AnaliseResultadoComponent } from '../analise-resultado/analise-resultad
   imports: [
     ReactiveFormsModule,
     AnaliseResultadoComponent,
+    PageHeroComponent,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
