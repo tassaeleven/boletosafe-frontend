@@ -1,17 +1,45 @@
 .auth {
+  position: relative;
+  overflow: hidden;
   min-height: 100dvh;
   display: grid;
   place-items: center;
   padding: 24px;
+  background: linear-gradient(160deg, var(--bs-hero-start) 0%, var(--bs-hero-end) 60%, var(--bs-hero-end) 100%);
+}
+
+// Arcos decorativos sutis no fundo, ecoando o gráfico ondulado de apps bancários.
+.auth::before,
+.auth::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.auth::before {
+  width: 480px;
+  height: 480px;
+  top: -240px;
+  left: -180px;
+}
+
+.auth::after {
+  width: 360px;
+  height: 360px;
+  bottom: -200px;
+  right: -140px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .auth__card {
   position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 400px;
   padding: 32px;
   border-radius: var(--mat-sys-corner-large);
-  overflow: hidden;
 }
 
 .auth__marca {
@@ -19,9 +47,12 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 20px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--mat-sys-primary) 12%, transparent);
   color: var(--mat-sys-primary);
-  font: var(--mat-sys-title-medium);
-  font-weight: 600;
+  font: var(--mat-sys-title-small);
+  font-weight: 700;
 }
 
 h1 {
@@ -43,7 +74,8 @@ form {
 
 form > button {
   margin-top: 8px;
-  height: 44px;
+  height: 46px;
+  border-radius: 999px;
 }
 
 .auth__erro {

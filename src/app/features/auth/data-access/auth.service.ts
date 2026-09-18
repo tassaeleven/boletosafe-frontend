@@ -7,7 +7,7 @@ import { environment } from '../../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/auth`;
+  private readonly baseUrl = `${environment.authApiUrl}/auth`;
 
   login(payload: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, payload);

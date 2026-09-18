@@ -16,7 +16,7 @@ padrão resource API do Angular.
 
 ```bash
 npm install
-npm start
+npm run start
 ```
 
 A aplicação sobe em `http://localhost:4200`. O `environment.development.ts`

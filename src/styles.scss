@@ -1,7 +1,9 @@
 // ---------------------------------------------------------------------------
 // BoletoSafe — tema global (Angular Material 3 / M3)
+// Identidade inspirada em apps bancários: gradiente bordô/vermelho no
+// cabeçalho, cartões brancos elevados sobre fundo neutro claro.
 // Paleta gerada em `_theme-colors.scss` a partir de:
-//   primary #2F6FED · secondary #4C6A92 · tertiary #12B886
+//   primary #C8102E · secondary #6E5A5E · tertiary #1C3F6E
 // Docs: https://material.angular.dev/guide/theming
 // ---------------------------------------------------------------------------
 @use '@angular/material' as mat;
@@ -22,13 +24,16 @@ html {
     )
   );
 
-  --mat-sys-corner-medium: 14px;
-  --mat-sys-corner-large: 20px;
+  --mat-sys-corner-medium: 16px;
+  --mat-sys-corner-large: 22px;
 
-  // Azuis da marca usados para separar as camadas da interface.
-  --bs-bg: #e9f2fe; // fundo da página — azul bem claro
-  --bs-form: #cfe1f8; // cartão do formulário de análise — azul intermediário
-  --bs-form-border: #b4cded; // contorno do cartão azul
+  // Gradiente de marca (cabeçalho, tela de login, cartões de destaque).
+  --bs-hero-start: #6e0e30;
+  --bs-hero-end: #e01850;
+  --bs-hero-gradient: linear-gradient(135deg, var(--bs-hero-start) 0%, var(--bs-hero-end) 100%);
+
+  // Fundo neutro claro para as telas internas.
+  --bs-bg: #f2f2f5;
 }
 
 // Override opcional de alto contraste (acessibilidade).
