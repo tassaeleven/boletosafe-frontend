@@ -28,6 +28,13 @@ export const routes: Routes = [
             (m) => m.AlertasListComponent,
           ),
       },
+      {
+        path: 'email-scanner',
+        loadComponent: () =>
+          import('./features/email-scanner/boletos-encontrados/boletos-encontrados.component').then(
+            (m) => m.BoletosEncontradosComponent,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: 'login' },
