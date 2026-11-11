@@ -1,0 +1,117 @@
+<app-page-hero titulo="Verificação por e-mail" [subtitulo]="subtitulo()" />
+
+<mat-card class="sincronizar">
+  <div class="sincronizar__linha">
+    <div>
+      <p class="sincronizar__titulo">Sincronizar com o Gmail</p>
+      <p class="sincronizar__descricao">
+        Buscamos boletos recebidos por e-mail nos últimos 30 dias e enviamos os dados
+        automaticamente para análise de risco.
+      </p>
+    </div>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="sincronizar()"
+      [disabled]="emailScannerStore.sincronizando()"
+    >
+      <mat-icon>sync</mat-icon>
+      {{ emailScannerStore.sincronizando() ? 'Sincronizando…' : 'Sincronizar agora' }}
+    </button>
+  </div>
+
+  @if (emailScannerStore.sincronizando()) {
+    <mat-progress-bar mode="indeterminate" class="sincronizar__barra"></mat-progress-bar>
+  }
+
+  @if (emailScannerStore.erroSincronizacao()) {
+    <p class="erro" role="alert">
+      <mat-icon>error</mat-icon>
+      {{ emailScannerStore.erroSincronizacao() }}
+    </p>
+  }
+</mat-card>
+
+<mat-expansion-panel class="perfil-senha">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>vpn_key</mat-icon>
+      Ativar desbloqueio automático de PDFs
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <p class="perfil-senha__descricao">
+    Alguns boletos vêm em PDF protegido por senha. Se você cadastrar seu CPF e data de
+    nascimento, tentamos automaticamente os padrões de senha mais comuns usados pelos bancos
+    antes de pedir que você digite a senha manualmente.
+  </p>
+
+  <form [formGroup]="formPerfilSenha" (ngSubmit)="onSalvarPerfilSenha()">
+    <mat-form-field appearance="outline">
+      <mat-label>CPF</mat-label>
+      <input matInput formControlName="cpf" inputmode="numeric" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data de nascimento</mat-label>
+      <input matInput type="date" formControlName="dataNascimento" />
+    </mat-form-field>
+
+    <div class="perfil-senha__acoes">
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="formPerfilSenha.invalid || emailScannerStore.salvandoPerfilSenha()"
+      >
+        {{ emailScannerStore.salvandoPerfilSenha() ? 'Salvando…' : 'Salvar' }}
+      </button>
+
+      @if (emailScannerStore.perfilSenhaSalvo()) {
+        <span class="perfil-senha__sucesso">
+          <mat-icon>check_circle</mat-icon>
+          Dados salvos.
+        </span>
+      }
+    </div>
+
+    @if (emailScannerStore.erroPerfilSenha()) {
+      <p class="erro" role="alert">
+        <mat-icon>error</mat-icon>
+        {{ emailScannerStore.erroPerfilSenha() }}
+      </p>
+    }
+  </form>
+</mat-expansion-panel>
+
+<h2 class="lista-titulo">Boletos encontrados</h2>
+
+@if (emailScannerStore.carregandoLista()) {
+  <mat-progress-bar mode="indeterminate" class="carregando"></mat-progress-bar>
+} @else if (emailScannerStore.erroLista()) {
+  <mat-card class="estado estado--erro">
+    <mat-icon>error</mat-icon>
+    <p>{{ emailScannerStore.erroLista() }}</p>
+    <button mat-stroked-button (click)="emailScannerStore.recarregar()">
+      <mat-icon>refresh</mat-icon>
+      Tentar de novo
+    </button>
+  </mat-card>
+} @else if (emailScannerStore.boletos().length === 0) {
+  <mat-card class="estado">
+    <mat-icon>inbox</mat-icon>
+    <p>Nenhum boleto encontrado ainda. Clique em "Sincronizar agora" para começar.</p>
+  </mat-card>
+} @else {
+  <div class="lista">
+    @for (boleto of emailScannerStore.boletos(); track boleto.id) {
+      <app-boleto-encontrado-card
+        [boleto]="boleto"
+        [desbloqueando]="desbloqueandoId(boleto.id)"
+        [erro]="erroDoBoleto(boleto.id)"
+        (desbloquear)="onDesbloquear(boleto.id, $event)"
+      />
+    }
+  </div>
+}

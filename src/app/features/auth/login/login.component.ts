@@ -1,6 +1,6 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,6 +20,7 @@ import { AuthStore } from '../data-access/auth.store';
     MatIconModule,
     MatInputModule,
     MatProgressBarModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -27,6 +28,8 @@ import { AuthStore } from '../data-access/auth.store';
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  protected readonly cadastroConcluido = 
+    inject(ActivatedRoute).snapshot.queryParamMap.get('cadastro') === 'ok';
   protected readonly authStore = inject(AuthStore);
 
   protected readonly mostrarSenha = signal(false);

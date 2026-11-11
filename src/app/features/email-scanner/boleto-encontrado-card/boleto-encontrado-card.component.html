@@ -1,0 +1,71 @@
+<mat-card class="boleto-card">
+  <div class="boleto-card__topo">
+    <span class="boleto-card__assunto">
+      <mat-icon>{{ statusIcone(boleto().status) }}</mat-icon>
+      {{ boleto().assunto || '(sem assunto)' }}
+    </span>
+    <span class="chip chip--{{ boleto().status.toLowerCase() }}">
+      {{ statusRotulo(boleto().status) }}
+    </span>
+  </div>
+
+  <p class="boleto-card__meta">
+    De {{ boleto().remetente }} · {{ boleto().criadoEm | date: 'dd/MM/yyyy HH:mm' }}
+  </p>
+  <p class="boleto-card__anexo">
+    <mat-icon>attach_file</mat-icon>
+    {{ boleto().nomeArquivoAnexo }}
+  </p>
+
+  @if (boleto().status === 'ANALISADO') {
+    <div class="boleto-card__dados">
+      @if (boleto().beneficiarioNomeExtraido) {
+        <p><strong>Beneficiário:</strong> {{ boleto().beneficiarioNomeExtraido }}</p>
+      }
+      @if (boleto().valorExtraido) {
+        <p><strong>Valor:</strong> {{ boleto().valorExtraido | currency: 'BRL' }}</p>
+      }
+      @if (boleto().vencimentoExtraido) {
+        <p><strong>Vencimento:</strong> {{ boleto().vencimentoExtraido | date: 'dd/MM/yyyy' }}</p>
+      }
+      <p class="boleto-card__aviso">
+        <mat-icon>info</mat-icon>
+        Os dados foram enviados para a análise de risco — confira o resultado em "Alertas".
+      </p>
+    </div>
+  }
+
+  @if (boleto().status === 'ERRO_EXTRACAO') {
+    <p class="boleto-card__aviso">
+      <mat-icon>info</mat-icon>
+      Não conseguimos ler os dados deste PDF automaticamente. Você pode conferir o boleto
+      manualmente na tela de Análise.
+    </p>
+  }
+
+  @if (boleto().status === 'BLOQUEADO') {
+    <form class="boleto-card__senha" [formGroup]="formSenha" (ngSubmit)="onDesbloquear()">
+      <mat-form-field appearance="outline">
+        <mat-label>Senha do PDF</mat-label>
+        <input matInput type="password" formControlName="senha" />
+        <mat-icon matSuffix>key</mat-icon>
+      </mat-form-field>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="formSenha.invalid || desbloqueando()"
+      >
+        <mat-icon>lock_open</mat-icon>
+        {{ desbloqueando() ? 'Desbloqueando…' : 'Desbloquear' }}
+      </button>
+    </form>
+
+    @if (erro()) {
+      <p class="erro" role="alert">
+        <mat-icon>error</mat-icon>
+        {{ erro() }}
+      </p>
+    }
+  }
+</mat-card>

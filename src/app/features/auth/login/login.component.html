@@ -8,6 +8,13 @@
     <h1>Entrar</h1>
     <p class="auth__sub">Analise o risco de um boleto antes de pagar.</p>
 
+    @if (cadastroConcluido) {
+      <p class="auth__sucesso" role="status">
+        <mat-icon>check_circle</mat-icon>
+        Conta criada! Entre com seu e-mail e senha.
+      </p>
+    }
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline">
         <mat-label>E-mail</mat-label>
@@ -58,6 +65,10 @@
         {{ authStore.loading() ? 'Entrando…' : 'Entrar' }}
       </button>
     </form>
+
+    <p class="auth__rodape">
+      Não tem conta? <a routerLink="/cadastro">Criar conta</a>
+    </p>
 
     @if (authStore.loading()) {
       <mat-progress-bar mode="indeterminate" class="auth__barra"></mat-progress-bar>
