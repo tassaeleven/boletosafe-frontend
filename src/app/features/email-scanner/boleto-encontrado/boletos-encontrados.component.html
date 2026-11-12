@@ -1,6 +1,5 @@
 <app-page-hero titulo="Verificação por e-mail" [subtitulo]="subtitulo()" />
 
-<mat-card class="sincronizar">
   <div class="sincronizar__linha">
     <div>
       <p class="sincronizar__titulo">Sincronizar com o Gmail</p>
@@ -8,30 +7,30 @@
         Buscamos boletos recebidos por e-mail nos últimos 30 dias e enviamos os dados
         automaticamente para análise de risco.
       </p>
+      @if (googleConectado()) {
+        <p class="sincronizar__conectado">
+          <mat-icon>check_circle</mat-icon>
+          Conta Google conectada.
+        </p>
+      }
     </div>
-    <button
-      mat-flat-button
-      color="primary"
-      type="button"
-      (click)="sincronizar()"
-      [disabled]="emailScannerStore.sincronizando()"
-    >
-      <mat-icon>sync</mat-icon>
-      {{ emailScannerStore.sincronizando() ? 'Sincronizando…' : 'Sincronizar agora' }}
-    </button>
+    <div class="sincronizar__botoes">
+      <button mat-stroked-button type="button" (click)="conectarGoogle()">
+        <mat-icon>link</mat-icon>
+        {{ googleConectado() ? 'Reconectar Google' : 'Conectar com o Google' }}
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="sincronizar()"
+        [disabled]="emailScannerStore.sincronizando()"
+      >
+        <mat-icon>sync</mat-icon>
+        {{ emailScannerStore.sincronizando() ? 'Sincronizando…' : 'Sincronizar agora' }}
+      </button>
+    </div>
   </div>
-
-  @if (emailScannerStore.sincronizando()) {
-    <mat-progress-bar mode="indeterminate" class="sincronizar__barra"></mat-progress-bar>
-  }
-
-  @if (emailScannerStore.erroSincronizacao()) {
-    <p class="erro" role="alert">
-      <mat-icon>error</mat-icon>
-      {{ emailScannerStore.erroSincronizacao() }}
-    </p>
-  }
-</mat-card>
 
 <mat-expansion-panel class="perfil-senha">
   <mat-expansion-panel-header>

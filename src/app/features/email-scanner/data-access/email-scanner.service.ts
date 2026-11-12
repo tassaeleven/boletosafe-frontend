@@ -20,6 +20,7 @@ export class EmailScannerService {
   sincronizar(usuarioId: number): Observable<BoletoEncontrado[]> {
     return this.http.post<BoletoEncontrado[]>(`${this.baseUrl}/sincronizar`, null, {
       params: { usuarioId },
+      withCredentials: true, // envia o cookie da sessão do Google
     });
   }
 
