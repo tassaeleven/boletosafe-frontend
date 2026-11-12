@@ -140,3 +140,24 @@
     align-items: stretch;
   }
 }
+
+.sincronizar__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sincronizar__conectado {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  color: #1e5128;
+  font: var(--mat-sys-label-large);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}

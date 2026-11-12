@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +11,8 @@ import { AuthStore } from '../../auth/data-access/auth.store';
 import { EmailScannerStore } from '../data-access/email-scanner.store';
 import { BoletoEncontradoCardComponent } from '../boleto-encontrado-card/boleto-encontrado-card.component';
 import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.component';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-boletos-encontrados',
@@ -34,6 +36,10 @@ export class BoletosEncontradosComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authStore = inject(AuthStore);
   protected readonly emailScannerStore = inject(EmailScannerStore);
+  private readonly route = inject(ActivatedRoute);
+  protected readonly googleConectado = signal(
+    this.route.snapshot.queryParamMap.get('google') === 'conectado',
+  );
 
   protected readonly subtitulo = computed(() => {
     if (this.emailScannerStore.carregandoLista()) {
@@ -50,6 +56,13 @@ export class BoletosEncontradosComponent {
     cpf: ['', Validators.required],
     dataNascimento: ['', Validators.required],
   });
+
+  // O login do Google precisa ser navegação de página (não XHR): o
+  // navegador vai até o serviço, que redireciona para o Google e, no
+  // fim, devolve para /email-scanner?google=conectado.
+  protected conectarGoogle(): void {
+    window.location.href = `${environment.emailScannerAppUrl}/oauth2/authorization/google`;
+  }
 
   protected sincronizar(): void {
     const usuarioId = this.authStore.usuarioId();
