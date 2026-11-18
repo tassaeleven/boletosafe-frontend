@@ -7,7 +7,7 @@
   <div class="boleto__topo">
     <span class="boleto__titulo">
       <mat-icon>receipt_long</mat-icon>
-      {{ grupo().beneficiarioNome || 'Beneficiário não identificado' }}
+      {{ grupo().titulo || grupo().beneficiarioNome || 'Boleto sem identificação' }}
     </span>
     <app-risk-badge [nivelRisco]="grupo().nivelRisco" />
   </div>

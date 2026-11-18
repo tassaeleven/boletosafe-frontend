@@ -18,6 +18,7 @@ export interface Alerta {
   vencimento: string;
   scoreTotal: number;
   nivelRisco: NivelRisco;
+  titulo: string | null;
 }
 
 // Um boleto analisado com todos os alertas que ele gerou.
@@ -30,5 +31,6 @@ export interface AlertasDoBoleto {
   vencimento: string;
   scoreTotal: number;
   nivelRisco: NivelRisco;
+  titulo: string | null;
   alertas: Alerta[];
 }
