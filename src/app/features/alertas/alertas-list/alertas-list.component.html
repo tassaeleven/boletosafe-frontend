@@ -30,24 +30,8 @@
   </mat-card>
 } @else {
   <div class="lista">
-    @for (alerta of alertaStore.alertas(); track alerta.id) {
-      <mat-card class="alerta">
-        <div class="alerta__topo">
-          <span class="alerta__tipo">
-            <mat-icon>{{ severidadeIcone(alerta.severidade) }}</mat-icon>
-            {{ alerta.tipo }}
-          </span>
-          <span class="chip chip--{{ alerta.severidade.toLowerCase() }}">
-            {{ severidadeRotulo(alerta.severidade) }}
-          </span>
-        </div>
-
-        <p class="alerta__descricao">{{ alerta.descricao }}</p>
-
-        <p class="alerta__meta">
-          {{ alerta.status | titlecase }} · {{ alerta.criadoEm | date: 'dd/MM/yyyy HH:mm' }}
-        </p>
-      </mat-card>
+    @for (grupo of alertaStore.boletosComAlertas(); track grupo.analiseRiscoId) {
+      <app-alertas-boleto-card [grupo]="grupo" />
     }
   </div>
 }

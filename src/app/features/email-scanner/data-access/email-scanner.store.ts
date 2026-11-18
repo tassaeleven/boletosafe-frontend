@@ -11,6 +11,7 @@ import {
 import { EmailScannerService } from './email-scanner.service';
 
 type EmailScannerState = {
+  boletosSincronizados: BoletoEncontrado[] | null;
   sincronizando: boolean;
   erroSincronizacao: string | null;
   desbloqueandoId: number | null;
@@ -22,6 +23,7 @@ type EmailScannerState = {
 };
 
 const initialState: EmailScannerState = {
+  boletosSincronizados: null,
   sincronizando: false,
   erroSincronizacao: null,
   desbloqueandoId: null,
@@ -33,21 +35,27 @@ const initialState: EmailScannerState = {
 };
 
 // GET /boletos é leitura -> httpResource() (mesmo padrão do AlertaStore).
-// sincronizar, cadastrarPerfilSenha e desbloquear são ações (POST) -> rxMethod
-// (mesmo padrão do AuthStore/BoletoStore).
+// A resposta do POST /sincronizar já traz a lista completa do usuário, então ela
+// tem prioridade na tela (boletosSincronizados); o GET cobre a abertura da página.
 export const EmailScannerStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withComputed(() => {
+  withComputed(({ boletosSincronizados }) => {
     const boletosResource = httpResource<BoletoEncontrado[]>(
       () => `${environment.emailScannerApiUrl}/email-scanner/boletos`,
     );
 
     return {
-      boletos: computed(() => boletosResource.value() ?? []),
-      carregandoLista: boletosResource.isLoading,
+      boletos: computed(
+        () => boletosSincronizados() ?? (boletosResource.hasValue() ? boletosResource.value() : []),
+      ),
+      carregandoLista: computed(
+        () => boletosSincronizados() === null && boletosResource.isLoading(),
+      ),
       erroLista: computed(() =>
-        boletosResource.error() ? 'Não foi possível carregar os boletos encontrados.' : null,
+        boletosSincronizados() === null && boletosResource.error()
+          ? 'Não foi possível carregar os boletos encontrados.'
+          : null,
       ),
       recarregar: () => boletosResource.reload(),
     };
@@ -58,8 +66,8 @@ export const EmailScannerStore = signalStore(
         tap(() => patchState(store, { sincronizando: true, erroSincronizacao: null })),
         switchMap((usuarioId) =>
           emailScannerService.sincronizar(usuarioId).pipe(
-            tap(() => {
-              patchState(store, { sincronizando: false });
+            tap((boletos) => {
+              patchState(store, { sincronizando: false, boletosSincronizados: boletos });
               store.recarregar();
             }),
             catchError(() => {
@@ -106,8 +114,13 @@ export const EmailScannerStore = signalStore(
         ),
         switchMap(({ id, senha }) =>
           emailScannerService.desbloquear(id, { senha }).pipe(
-            tap(() => {
-              patchState(store, { desbloqueandoId: null });
+            tap((atualizado) => {
+              patchState(store, (estado) => ({
+                desbloqueandoId: null,
+                boletosSincronizados:
+                  estado.boletosSincronizados?.map((b) => (b.id === atualizado.id ? atualizado : b)) ??
+                  null,
+              }));
               store.recarregar();
             }),
             catchError(() => {
