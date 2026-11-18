@@ -1,0 +1,137 @@
+.boleto {
+  padding: 16px 20px;
+  border-radius: var(--mat-sys-corner-medium);
+  border-left: 4px solid var(--mat-sys-outline-variant);
+}
+
+.risco-baixo {
+  border-left-color: #1e5128;
+}
+
+.risco-atencao {
+  border-left-color: #b26a00;
+}
+
+.risco-alto {
+  border-left-color: #b3261e;
+}
+
+.boleto__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.boleto__titulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--mat-sys-title-small);
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.boleto__meta {
+  margin: 10px 0 0;
+  font: var(--mat-sys-body-medium);
+}
+
+.boleto__linha {
+  margin: 6px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  word-break: break-all;
+}
+
+.boleto__score {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.boleto__alertas-titulo {
+  margin: 16px 0 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  font: var(--mat-sys-title-small);
+}
+
+.alertas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alerta {
+  padding: 10px 12px;
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-high);
+}
+
+.alerta__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.alerta__tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--mat-sys-title-small);
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: var(--mat-sys-on-surface-variant);
+  }
+}
+
+.alerta__descricao {
+  margin: 6px 0 0;
+  font: var(--mat-sys-body-medium);
+}
+
+.alerta__meta {
+  margin: 8px 0 0;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+}
+
+.chip {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font: var(--mat-sys-label-medium);
+  font-weight: 600;
+}
+
+.chip--baixa {
+  background: #e6f4ea;
+  color: #1e5128;
+}
+
+.chip--media {
+  background: #fdf0e1;
+  color: #6b3b06;
+}
+
+.chip--alta {
+  background: #fce8e8;
+  color: #7a1f1f;
+}

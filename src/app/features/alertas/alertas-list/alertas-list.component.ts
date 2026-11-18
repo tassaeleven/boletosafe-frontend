@@ -1,20 +1,19 @@
-import { DatePipe, TitleCasePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { AlertaSeveridade, AlertaStatus } from '../../../core/models/alerta.model';
+import { AlertaStatus } from '../../../core/models/alerta.model';
 import { AlertaStore } from '../data-access/alerta.store';
+import { AlertasBoletoCardComponent } from '../alertas-boleto-card/alertas-boleto-card.component';
 import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.component';
 
 @Component({
   selector: 'app-alertas-list',
   standalone: true,
   imports: [
-    DatePipe,
-    TitleCasePipe,
+    AlertasBoletoCardComponent,
     PageHeroComponent,
     MatButtonModule,
     MatButtonToggleModule,
@@ -32,11 +31,15 @@ export class AlertasListComponent {
     if (this.alertaStore.carregando()) {
       return 'Carregando alertas...';
     }
-    const total = this.alertaStore.alertas().length;
-    if (total === 0) {
+    const alertas = this.alertaStore.alertas().length;
+    if (alertas === 0) {
       return 'Nenhuma ocorrência encontrada para este filtro.';
     }
-    return `${total} ${total === 1 ? 'alerta encontrado' : 'alertas encontrados'} para este filtro.`;
+    const boletos = this.alertaStore.boletosComAlertas().length;
+    return (
+      `${alertas} ${alertas === 1 ? 'alerta' : 'alertas'} em ` +
+      `${boletos} ${boletos === 1 ? 'boleto' : 'boletos'} para este filtro.`
+    );
   });
 
   protected readonly statusOpcoes: Array<{ valor: AlertaStatus | null; rotulo: string }> = [
@@ -48,23 +51,5 @@ export class AlertasListComponent {
 
   protected filtrar(status: AlertaStatus | null): void {
     this.alertaStore.filtrarPorStatus(status);
-  }
-
-  protected severidadeRotulo(severidade: AlertaSeveridade): string {
-    const rotulos: Record<AlertaSeveridade, string> = {
-      BAIXA: 'Baixa',
-      MEDIA: 'Média',
-      ALTA: 'Alta',
-    };
-    return rotulos[severidade];
-  }
-
-  protected severidadeIcone(severidade: AlertaSeveridade): string {
-    const icones: Record<AlertaSeveridade, string> = {
-      BAIXA: 'info',
-      MEDIA: 'warning',
-      ALTA: 'gpp_maybe',
-    };
-    return icones[severidade];
   }
 }
