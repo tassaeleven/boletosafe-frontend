@@ -1,0 +1,56 @@
+<mat-card
+  class="boleto"
+  [class.risco-baixo]="grupo().nivelRisco === 'BAIXO'"
+  [class.risco-atencao]="grupo().nivelRisco === 'ATENCAO'"
+  [class.risco-alto]="grupo().nivelRisco === 'ALTO'"
+>
+  <div class="boleto__topo">
+    <span class="boleto__titulo">
+      <mat-icon>receipt_long</mat-icon>
+      {{ grupo().beneficiarioNome || 'Beneficiário não identificado' }}
+    </span>
+    <app-risk-badge [nivelRisco]="grupo().nivelRisco" />
+  </div>
+
+  <p class="boleto__meta">
+    <strong>{{ grupo().valor | currency: 'BRL' }}</strong>
+    · vence em {{ grupo().vencimento | date: 'dd/MM/yyyy' }}
+    @if (grupo().beneficiarioDocumento) {
+      · {{ grupo().beneficiarioDocumento }}
+    }
+  </p>
+
+  @if (grupo().linhaDigitavel) {
+    <p class="boleto__linha">{{ linhaFormatada(grupo().linhaDigitavel) }}</p>
+  }
+
+  <div class="boleto__score">
+    <span>Score de risco: {{ grupo().scoreTotal }}/100</span>
+    <mat-progress-bar mode="determinate" [value]="grupo().scoreTotal"></mat-progress-bar>
+  </div>
+
+  <h3 class="boleto__alertas-titulo">
+    {{ grupo().alertas.length }}
+    {{ grupo().alertas.length === 1 ? 'alerta neste boleto' : 'alertas neste boleto' }}
+  </h3>
+
+  <ul class="alertas">
+    @for (alerta of grupo().alertas; track alerta.id) {
+      <li class="alerta">
+        <div class="alerta__topo">
+          <span class="alerta__tipo">
+            <mat-icon>{{ severidadeIcone(alerta.severidade) }}</mat-icon>
+            {{ tipoRotulo(alerta.tipo) }}
+          </span>
+          <span class="chip chip--{{ alerta.severidade.toLowerCase() }}">
+            {{ severidadeRotulo(alerta.severidade) }}
+          </span>
+        </div>
+        <p class="alerta__descricao">{{ alerta.descricao }}</p>
+        <p class="alerta__meta">
+          {{ statusRotulo(alerta.status) }} · {{ alerta.criadoEm | date: 'dd/MM/yyyy HH:mm' }}
+        </p>
+      </li>
+    }
+  </ul>
+</mat-card>
