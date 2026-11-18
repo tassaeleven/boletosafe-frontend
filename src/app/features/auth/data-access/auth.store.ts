@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 
 type AuthState = {
   token: string | null;
+  usuarioId: number | null
   nome: string | null;
   perfil: string | null;
   loading: boolean;
@@ -15,6 +16,7 @@ type AuthState = {
 
 const initialState: AuthState = {
   token: null,
+  usuarioId: null,
   nome: null,
   perfil: null,
   loading: false,
@@ -39,6 +41,7 @@ export const AuthStore = signalStore(
             tap((resposta) =>
               patchState(store, {
                 token: resposta.token,
+                usuarioId: resposta.usuarioId,
                 nome: resposta.nome,
                 perfil: resposta.perfil,
                 loading: false,

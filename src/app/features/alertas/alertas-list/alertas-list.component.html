@@ -1,7 +1,4 @@
-<header class="cabecalho">
-  <h1>Alertas</h1>
-  <p>Ocorrências geradas pelo motor de risco durante as análises de boletos.</p>
-</header>
+<app-page-hero titulo="Alertas" [subtitulo]="subtitulo()" />
 
 <mat-button-toggle-group
   class="filtros"
@@ -18,7 +15,7 @@
 @if (alertaStore.carregando()) {
   <mat-progress-bar mode="indeterminate" class="carregando"></mat-progress-bar>
 } @else if (alertaStore.erro()) {
-  <mat-card appearance="outlined" class="estado estado--erro">
+  <mat-card class="estado estado--erro">
     <mat-icon>error</mat-icon>
     <p>{{ alertaStore.erro() }}</p>
     <button mat-stroked-button (click)="alertaStore.recarregar()">
@@ -27,14 +24,14 @@
     </button>
   </mat-card>
 } @else if (alertaStore.alertas().length === 0) {
-  <mat-card appearance="outlined" class="estado">
+  <mat-card class="estado">
     <mat-icon>inbox</mat-icon>
     <p>Nenhum alerta encontrado para este filtro.</p>
   </mat-card>
 } @else {
   <div class="lista">
     @for (alerta of alertaStore.alertas(); track alerta.id) {
-      <mat-card appearance="outlined" class="alerta">
+      <mat-card class="alerta">
         <div class="alerta__topo">
           <span class="alerta__tipo">
             <mat-icon>{{ severidadeIcone(alerta.severidade) }}</mat-icon>

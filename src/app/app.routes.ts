@@ -9,6 +9,11 @@ export const routes: Routes = [
       import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    path: 'cadastro',
+    loadComponent: () =>
+      import('./features/auth/register/register.component').then((m) => m.RegisterComponent),
+  },
+  {
     // Área autenticada: todas as telas ficam dentro do shell (barra + navegação).
     path: '',
     canActivate: [authGuard],
@@ -26,6 +31,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/alertas/alertas-list/alertas-list.component').then(
             (m) => m.AlertasListComponent,
+          ),
+      },
+      {
+        path: 'email-scanner',
+        loadComponent: () =>
+          import('./features/email-scanner/boleto-encontrado/boletos-encontrados.component').then(
+            (m) => m.BoletosEncontradosComponent,
           ),
       },
     ],

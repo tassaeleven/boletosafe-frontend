@@ -1,0 +1,98 @@
+<div class="auth">
+  <mat-card class="auth__card">
+    <div class="auth__marca">
+      <mat-icon>verified_user</mat-icon>
+      <span>BoletoSafe</span>
+    </div>
+
+    <h1>Criar conta</h1>
+    <p class="auth__sub">Cadastre-se para analisar o risco de boletos antes de pagar.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome</mat-label>
+        <input matInput type="text" formControlName="nome" autocomplete="name" />
+        <mat-icon matSuffix>person</mat-icon>
+        @if (form.controls.nome.hasError('required')) {
+          <mat-error>Informe seu nome.</mat-error>
+        } @else if (form.controls.nome.hasError('minlength')) {
+          <mat-error>O nome deve ter pelo menos 2 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        <mat-icon matSuffix>mail</mat-icon>
+        @if (form.controls.email.hasError('required')) {
+          <mat-error>Informe seu e-mail.</mat-error>
+        } @else if (form.controls.email.hasError('email')) {
+          <mat-error>E-mail inválido.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input
+          matInput
+          [type]="mostrarSenha() ? 'text' : 'password'"
+          formControlName="senha"
+          autocomplete="new-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="mostrarSenha.set(!mostrarSenha())"
+          [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
+        >
+          <mat-icon>{{ mostrarSenha() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.controls.senha.hasError('required')) {
+          <mat-error>Informe uma senha.</mat-error>
+        } @else if (form.controls.senha.hasError('minlength')) {
+          <mat-error>A senha deve ter pelo menos 6 caracteres.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirmar senha</mat-label>
+        <input
+          matInput
+          [type]="mostrarSenha() ? 'text' : 'password'"
+          formControlName="confirmarSenha"
+          autocomplete="new-password"
+        />
+        @if (form.controls.confirmarSenha.hasError('required')) {
+          <mat-error>Confirme sua senha.</mat-error>
+        } @else if (form.controls.confirmarSenha.hasError('senhasDiferentes')) {
+          <mat-error>As senhas não conferem.</mat-error>
+        }
+      </mat-form-field>
+
+      @if (store.error()) {
+        <p class="auth__erro" role="alert">
+          <mat-icon>error</mat-icon>
+          {{ store.error() }}
+        </p>
+      }
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="form.invalid || store.loading()"
+      >
+        {{ store.loading() ? 'Criando conta…' : 'Criar conta' }}
+      </button>
+    </form>
+
+    <p class="auth__rodape">
+      Já tem conta? <a routerLink="/login">Entrar</a>
+    </p>
+
+    @if (store.loading()) {
+      <mat-progress-bar mode="indeterminate" class="auth__barra"></mat-progress-bar>
+    }
+  </mat-card>
+</div>

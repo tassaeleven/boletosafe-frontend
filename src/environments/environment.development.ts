@@ -1,4 +1,7 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api/v1',
+  authApiUrl: 'http://localhost:8081/api/v1',
+  riskEngineApiUrl: 'http://localhost:8082/api/v1',
+  emailScannerApiUrl: 'http://localhost:8083/api/v1',
+  emailScannerAppUrl: 'http://localhost:8083',
 };

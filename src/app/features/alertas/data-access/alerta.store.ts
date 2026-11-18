@@ -24,7 +24,7 @@ export const AlertaStore = signalStore(
     const alertasResource = httpResource<Alerta[]>(() => {
       const status = store.status();
       return {
-        url: `${environment.apiUrl}/boleto/alertas`,
+        url: `${environment.riskEngineApiUrl}/boleto/alertas`,
         params: status ? { status } : undefined,
       };
     });

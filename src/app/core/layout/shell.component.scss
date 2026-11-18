@@ -9,10 +9,10 @@
   top: 0;
   z-index: 10;
   gap: 4px;
-  padding-inline: 12px;
-  background: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  padding-inline: 16px;
+  background: var(--bs-hero-gradient);
+  color: #fff;
+  --mdc-text-button-label-text-color: #fff;
 }
 
 .marca {
@@ -21,28 +21,40 @@
   gap: 8px;
   margin-right: 12px;
   text-decoration: none;
-  color: var(--mat-sys-primary);
+  color: #fff;
   font: var(--mat-sys-title-medium);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.2px;
+
+  mat-icon {
+    padding: 4px;
+    box-sizing: content-box;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+  }
 }
 
 .nav {
   display: flex;
-  gap: 2px;
+  gap: 4px;
 
   a {
-    color: var(--mat-sys-on-surface-variant);
+    color: rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
   }
 
   a.ativo {
-    background: color-mix(in srgb, var(--mat-sys-primary) 14%, transparent);
+    background: #fff;
     color: var(--mat-sys-primary);
   }
 }
 
 .espaco {
   flex: 1 1 auto;
+}
+
+.conta {
+  color: #fff;
 }
 
 .conta-info {
