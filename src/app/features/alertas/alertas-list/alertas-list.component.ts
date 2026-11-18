@@ -27,6 +27,10 @@ import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.compon
 export class AlertasListComponent {
   protected readonly alertaStore = inject(AlertaStore);
 
+  constructor() {
+    this.alertaStore.recarregar();
+  }
+
   protected readonly subtitulo = computed(() => {
     if (this.alertaStore.carregando()) {
       return 'Carregando alertas...';
@@ -45,8 +49,6 @@ export class AlertasListComponent {
   protected readonly statusOpcoes: Array<{ valor: AlertaStatus | null; rotulo: string }> = [
     { valor: null, rotulo: 'Todos' },
     { valor: 'ABERTO', rotulo: 'Abertos' },
-    { valor: 'VISUALIZADO', rotulo: 'Visualizados' },
-    { valor: 'RESOLVIDO', rotulo: 'Resolvidos' },
   ];
 
   protected filtrar(status: AlertaStatus | null): void {

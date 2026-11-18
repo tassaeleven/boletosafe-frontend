@@ -55,6 +55,7 @@ export const AlertaStore = signalStore(
             vencimento: alerta.vencimento,
             scoreTotal: alerta.scoreTotal,
             nivelRisco: alerta.nivelRisco,
+            titulo: alerta.titulo,
             alertas: [],
           };
           grupos.set(alerta.analiseRiscoId, grupo);
