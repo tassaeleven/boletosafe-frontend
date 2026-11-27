@@ -104,7 +104,7 @@
 <div class="lista">
   @for (boleto of emailScannerStore.boletos(); track boleto.id) {
   <app-boleto-encontrado-card [boleto]="boleto" [desbloqueando]="desbloqueandoId(boleto.id)"
-    [erro]="erroDoBoleto(boleto.id)" (desbloquear)="onDesbloquear(boleto.id, $event)" />
+    [erro]="erroDoBoleto(boleto.id)" [analise]="analiseDe(boleto)" (desbloquear)="onDesbloquear(boleto.id, $event)" />
   }
 </div>
 }

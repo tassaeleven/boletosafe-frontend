@@ -13,6 +13,7 @@ import { BoletoEncontradoCardComponent } from '../boleto-encontrado-card/boleto-
 import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.component';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { BoletoEncontrado, ResumoAnalise } from '../../../core/models/email-scanner.model';
 
 @Component({
   selector: 'app-boletos-encontrados',
@@ -90,6 +91,12 @@ export class BoletosEncontradosComponent {
   protected erroDoBoleto(id: number): string | null {
     return this.emailScannerStore.erroDesbloqueioId() === id
       ? this.emailScannerStore.erroDesbloqueio()
+      : null;
+  }
+
+  protected analiseDe(boleto: BoletoEncontrado): ResumoAnalise | null {
+    return boleto.linhaDigitavel
+      ? (this.emailScannerStore.analisePorLinha().get(boleto.linhaDigitavel) ?? null)
       : null;
   }
 }

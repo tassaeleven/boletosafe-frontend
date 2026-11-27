@@ -130,6 +130,26 @@
   color: #7a1f1f;
 }
 
+.chip--risco-baixo {
+  background: #e6f4ea;
+  color: #1e5128;
+}
+
+.chip--risco-atencao {
+  background: #fff4d6;
+  color: #6b4e00;
+}
+
+.chip--risco-alto {
+  background: #fce8e8;
+  color: #7a1f1f;
+}
+
+.chip--analisando {
+  background: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface-variant);
+}
+
 @media (max-width: 480px) {
   .boleto-card__senha {
     flex-direction: column;

@@ -1,12 +1,20 @@
-import { computed, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { httpResource } from '@angular/common/http';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, of, pipe, switchMap, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
   BoletoEncontrado,
   CadastrarPerfilSenhaRequest,
+  ResumoAnalise,
 } from '../../../core/models/email-scanner.model';
 import { EmailScannerService } from './email-scanner.service';
 
@@ -34,6 +42,9 @@ const initialState: EmailScannerState = {
   erroPerfilSenha: null,
 };
 
+const MAX_TENTATIVAS_ANALISE = 8;
+const INTERVALO_ANALISE_MS = 3000;
+
 // GET /boletos é leitura -> httpResource() (mesmo padrão do AlertaStore).
 // A resposta do POST /sincronizar já traz a lista completa do usuário, então ela
 // tem prioridade na tela (boletosSincronizados); o GET cobre a abertura da página.
@@ -45,10 +56,41 @@ export const EmailScannerStore = signalStore(
       () => `${environment.emailScannerApiUrl}/email-scanner/boletos`,
     );
 
+    const boletos = computed(
+      () => boletosSincronizados() ?? (boletosResource.hasValue() ? boletosResource.value() : []),
+    );
+
+    // Linhas dos boletos já enviados para análise: é o que perguntamos ao risk-engine.
+    const linhasAnalisadas = computed(() =>
+      boletos()
+        .filter((b) => b.status === 'ANALISADO' && !!b.linhaDigitavel)
+        .map((b) => b.linhaDigitavel as string),
+    );
+
+    const analisesResource = httpResource<ResumoAnalise[]>(() => {
+      const linhas = linhasAnalisadas();
+      return linhas.length
+        ? { url: `${environment.riskEngineApiUrl}/boleto/analises`, params: { linhas } }
+        : undefined;
+    });
+
+    const analisePorLinha = computed(
+      () =>
+        new Map<string, ResumoAnalise>(
+          (analisesResource.hasValue() ? analisesResource.value() : []).map((a) => [
+            a.linhaDigitavel,
+            a,
+          ]),
+        ),
+    );
+
+    // Enviados para análise, mas o resultado ainda não chegou do risk-engine.
+    const analisesPendentes = computed(
+      () => linhasAnalisadas().filter((linha) => !analisePorLinha().has(linha)).length,
+    );
+
     return {
-      boletos: computed(
-        () => boletosSincronizados() ?? (boletosResource.hasValue() ? boletosResource.value() : []),
-      ),
+      boletos,
       carregandoLista: computed(
         () => boletosSincronizados() === null && boletosResource.isLoading(),
       ),
@@ -58,6 +100,10 @@ export const EmailScannerStore = signalStore(
           : null,
       ),
       recarregar: () => boletosResource.reload(),
+      analisePorLinha,
+      analisesPendentes,
+      carregandoAnalises: computed(() => analisesResource.isLoading()),
+      recarregarAnalises: () => analisesResource.reload(),
     };
   }),
   withMethods((store, emailScannerService = inject(EmailScannerService)) => ({
@@ -136,4 +182,30 @@ export const EmailScannerStore = signalStore(
       ),
     ),
   })),
+  withHooks({
+    // A análise é assíncrona (fila): enquanto houver boleto sem resultado,
+    // consulta de novo a cada 3s, no máximo 8 vezes.
+    onInit(store) {
+      let tentativas = 0;
+
+      effect((onCleanup) => {
+        if (store.carregandoAnalises()) {
+          return;
+        }
+        if (store.analisesPendentes() === 0) {
+          tentativas = 0;
+          return;
+        }
+        if (tentativas >= MAX_TENTATIVAS_ANALISE) {
+          return;
+        }
+
+        const timer = setTimeout(() => {
+          tentativas++;
+          store.recarregarAnalises();
+        }, INTERVALO_ANALISE_MS);
+        onCleanup(() => clearTimeout(timer));
+      });
+    },
+  }),
 );

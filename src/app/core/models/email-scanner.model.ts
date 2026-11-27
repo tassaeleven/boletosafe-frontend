@@ -1,3 +1,5 @@
+import { NivelRisco } from './boleto.model';
+
 export type StatusBoletoEncontrado = 'BLOQUEADO' | 'ANALISADO' | 'ERRO_EXTRACAO';
 
 // Bate exatamente com BoletoEncontradoResponse do email-scanner-service.
@@ -11,6 +13,7 @@ export interface BoletoEncontrado {
   valorExtraido: number | null;
   vencimentoExtraido: string | null;
   criadoEm: string;
+  linhaDigitavel: string | null;
 }
 
 // Bate com CadastrarPerfilSenhaRequest — dados opcionais que o usuário
@@ -23,4 +26,11 @@ export interface CadastrarPerfilSenhaRequest {
 // Bate com DesbloquearBoletoRequest.
 export interface DesbloquearBoletoRequest {
   senha: string;
+}
+
+// Bate com AnaliseResumoResponse do boleto-risk-engine.
+export interface ResumoAnalise {
+  linhaDigitavel: string;
+  scoreTotal: number;
+  nivelRisco: NivelRisco;
 }
