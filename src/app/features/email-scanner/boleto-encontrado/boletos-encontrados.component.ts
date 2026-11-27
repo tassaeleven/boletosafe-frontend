@@ -62,7 +62,12 @@ export class BoletosEncontradosComponent {
   // navegador vai até o serviço, que redireciona para o Google e, no
   // fim, devolve para /email-scanner?google=conectado.
   protected conectarGoogle(): void {
-    window.location.href = `${environment.emailScannerAppUrl}/oauth2/authorization/google`;
+    const usuarioId = this.authStore.usuarioId();
+    if (usuarioId == null) {
+      return;
+    }
+    window.location.href =
+      `${environment.emailScannerAppUrl}/oauth2/authorization/google?usuarioId=${usuarioId}`;
   }
 
   protected sincronizar(): void {
