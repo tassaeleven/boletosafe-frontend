@@ -13,6 +13,7 @@ import { BoletoEncontradoCardComponent } from '../boleto-encontrado-card/boleto-
 import { PageHeroComponent } from '../../../shared/ui/page-hero/page-hero.component';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { BoletoEncontrado, ResumoAnalise } from '../../../core/models/email-scanner.model';
 
 @Component({
   selector: 'app-boletos-encontrados',
@@ -61,7 +62,12 @@ export class BoletosEncontradosComponent {
   // navegador vai até o serviço, que redireciona para o Google e, no
   // fim, devolve para /email-scanner?google=conectado.
   protected conectarGoogle(): void {
-    window.location.href = `${environment.emailScannerAppUrl}/oauth2/authorization/google`;
+    const usuarioId = this.authStore.usuarioId();
+    if (usuarioId == null) {
+      return;
+    }
+    window.location.href =
+      `${environment.emailScannerAppUrl}/oauth2/authorization/google?usuarioId=${usuarioId}`;
   }
 
   protected sincronizar(): void {
@@ -90,6 +96,12 @@ export class BoletosEncontradosComponent {
   protected erroDoBoleto(id: number): string | null {
     return this.emailScannerStore.erroDesbloqueioId() === id
       ? this.emailScannerStore.erroDesbloqueio()
+      : null;
+  }
+
+  protected analiseDe(boleto: BoletoEncontrado): ResumoAnalise | null {
+    return boleto.linhaDigitavel
+      ? (this.emailScannerStore.analisePorLinha().get(boleto.linhaDigitavel) ?? null)
       : null;
   }
 }

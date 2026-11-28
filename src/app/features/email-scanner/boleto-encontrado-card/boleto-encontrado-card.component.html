@@ -1,11 +1,11 @@
 <mat-card class="boleto-card">
-  <div class="boleto-card__topo">
+    <div class="boleto-card__topo">
     <span class="boleto-card__assunto">
-      <mat-icon>{{ statusIcone(boleto().status) }}</mat-icon>
+      <mat-icon>{{ icone() }}</mat-icon>
       {{ boleto().assunto || '(sem assunto)' }}
     </span>
-    <span class="chip chip--{{ boleto().status.toLowerCase() }}">
-      {{ statusRotulo(boleto().status) }}
+    <span class="chip chip--{{ chipClasse() }}">
+      {{ chipRotulo() }}
     </span>
   </div>
 
@@ -28,10 +28,12 @@
       @if (boleto().vencimentoExtraido) {
         <p><strong>Vencimento:</strong> {{ boleto().vencimentoExtraido | date: 'dd/MM/yyyy' }}</p>
       }
-      <p class="boleto-card__aviso">
-        <mat-icon>info</mat-icon>
-        Os dados foram enviados para a análise de risco — confira o resultado em "Alertas".
-      </p>
+      @if (exibirAvisoAlertas()) {
+        <p class="boleto-card__aviso">
+          <mat-icon>info</mat-icon>
+          Este boleto apresenta risco. Veja os motivos detalhados em "Alertas".
+        </p>
+      }
     </div>
   }
 
